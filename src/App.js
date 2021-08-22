@@ -1,4 +1,4 @@
-import {ChakraProvider, Button} from "@chakra-ui/react"
+import {ChakraProvider} from "@chakra-ui/react"
 import Login from "./components/Login"
 
 

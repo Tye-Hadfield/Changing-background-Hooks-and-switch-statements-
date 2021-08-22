@@ -3,7 +3,6 @@ import '../components/Placeholder.css'
 import {
     FormControl,
     FormLabel,
-    FormHelperText,
     Input,
     Radio,
     RadioGroup,
@@ -47,7 +46,6 @@ useEffect(() => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    textAlign: "center",
     minHeight: "100vh"
     }}>
         
