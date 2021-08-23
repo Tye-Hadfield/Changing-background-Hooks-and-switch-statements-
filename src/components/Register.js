@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../components/Placeholder.css'
+import '../components/Selectors.css'
 import {
     FormControl,
     FormLabel,
@@ -9,7 +9,7 @@ import {
     HStack
   } from "@chakra-ui/react"
   
-export default function Login() {
+export default function Register() {
 
 const [animeChoice, setanimeChoice] = useState("Naruto")
 
@@ -45,12 +45,12 @@ useEffect(() => {
     textAlign:"-webkit-center",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100vh"
+    alignItems: "flex-end",
+    minHeight: "100vh",
     }}>
         
                 
-<FormControl id="Email_Address" style={{width:"400px", textAlignLast: "center",bottom:"30px", backgroundColor:"rgba(195, 192, 192, 0.5)", borderRadius:"20px", padding:"30px", color:"white"}} isRequired>
+<FormControl id="Email_Address" style={{width:"600px", textAlignLast: "center", backgroundColor:"rgba(247, 255, 249)", borderRadius:"20px", padding:"20px", color:"dodgerblue", margin:"5%"}} isRequired>
     <FormLabel>Email Address</FormLabel>
     <Input placeholder="Naruto@email.com" />
     <FormLabel>Username</FormLabel>
@@ -63,6 +63,7 @@ useEffect(() => {
         <Radio value="One-Piece">One Piece</Radio>
         <Radio value="My-Hero-Academia">My Hero Academia</Radio>
         <Radio value="Death-Note">Death Note</Radio>
+        <Radio value="Other">Other</Radio>
         </HStack>
     </RadioGroup>
 </FormControl>

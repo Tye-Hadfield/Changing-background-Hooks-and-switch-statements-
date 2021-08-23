@@ -1,0 +1,12 @@
+::placeholder {
+    color: dodgerblue;
+}
+
+.navbarbtns {
+    transition-duration: 0.4s !important;
+  }
+  
+  .navbarbtns:hover {
+    background-color: #3E7CB1 !important; 
+    color: #F17300 !important;
+  }
