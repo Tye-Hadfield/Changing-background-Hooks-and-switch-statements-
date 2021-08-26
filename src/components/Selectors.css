@@ -10,3 +10,12 @@
     background-color: #3E7CB1 !important; 
     color: #F17300 !important;
   }
+
+.drawerbtns {
+    transition-duration: 0.4s !important;
+  }
+  
+  .drawerbtns:hover {
+    background-color: #F17300 !important; 
+    color: #81A4CD !important;
+  }

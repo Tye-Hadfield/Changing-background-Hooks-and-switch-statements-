@@ -2,16 +2,18 @@ import React, {useState} from 'react'
 import '../components/Textalign.css'
 
 import {
+    useToast,
     useDisclosure,
-    Input,
     Image,
     Button,
     Box,
     SimpleGrid,
     Popover,PopoverTrigger,PopoverContent,PopoverHeader,PopoverArrow,PopoverCloseButton,PopoverBody,
-    Drawer,DrawerBody,DrawerFooter,DrawerHeader,DrawerOverlay,DrawerContent,DrawerCloseButton,
-    Table,Thead,Tbody,Tfoot,Tr,Th,Td,TableCaption,} from "@chakra-ui/react"
-import { FaFacebook,FaTwitter,FaCartPlus } from 'react-icons/fa'
+    Drawer,DrawerBody,DrawerHeader,DrawerOverlay,DrawerContent,DrawerCloseButton,
+    Table,Thead,Tbody,Tr,Th,Td,TableCaption,
+    Modal,ModalOverlay,ModalContent,ModalHeader,ModalFooter,ModalBody,ModalCloseButton,
+    } from "@chakra-ui/react"
+import { FaFacebook,FaTwitter,FaCartPlus,FaWindowClose } from 'react-icons/fa'
 
 import Lottie from 'react-lottie';
 import animationData from '../components/lotties/naruto-eating-ramen.json';
@@ -31,21 +33,44 @@ export default function Home() {
       };
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [orderButton, setorderbutton] = useState(false)
+    const [checkoutButton, setcheckoutbutton] = useState(false)
+    const [checkScreen, setcheckScreen] = useState(false)
     const btnRef = React.useRef()
+
+    const [cart, setCart] = useState([])
+
+ 
+    const handleRemove = (item, index) => {
+        setCart(cart.filter(cart => cart !== index ))
+    }
+
+    const toast = useToast()
+
 
     const menuItems = [
         {
-        item: "Ramen",
+        name: "Ramen",
         cost: 7
         },
         {
-        item: "Rice Bowl",
-        cost: 4
+        name: "Rice Bowl",
+        cost: 5
+        },
+        {
+        name: "Bao Bun",
+        cost: 3
+        },
+        {
+        name: "Dumpling",
+        cost: 3
+        },
+        {
+        name: "BBQ Pork",
+        cost: 3
         }
     ]
     
-    
+
     
     return (
 
@@ -159,67 +184,126 @@ export default function Home() {
                     >
                         <DrawerOverlay />
                         <DrawerContent>
-                        <DrawerCloseButton />
-                        <DrawerHeader> Naruto Ramen Bar Menu</DrawerHeader>
+                        <DrawerCloseButton style={{color:"white"}} />
+                        <DrawerHeader style={{backgroundColor:"#054A91", color:"white"}}> Naruto Ramen Bar Menu</DrawerHeader>
 
-                        <DrawerBody>
-                            <Table variant="simple" size="sm">
-                                <TableCaption>Best menu in the Hidden Leaf Village! You better believe it.</TableCaption>
+                        <DrawerBody style={{backgroundColor:"#054A91", color:"white"}}>
+                            <Table variant="simple" size="sm" >
+                                <TableCaption style={{color:"white"}}>Best menu in the Hidden Leaf Village! You better believe it.</TableCaption>
                                 <Thead>
                                     <Tr>
-                                    <Th>Item</Th>
-                                    <Th>Cost</Th>
-                                    <Th>Add To Cart</Th>
+                                    <Th style={{color:"white"}}>Item</Th>
+                                    <Th style={{color:"white"}}>Cost</Th>
+                                    <Th style={{color:"white"}}>Add To Cart</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
                                 
                                 {menuItems.map((item) => (
                                     <Tr>
-                                    <Td>{item.item}</Td>
+                                    <Td>{item.name}</Td>
                                     <Td>{item.cost}</Td>
-                                    <Td> <Button leftIcon={<FaCartPlus />} variant="solid" style={{backgroundColor:"#3E7CB1"}} /> </Td>
+                                    <Td> <Button variant="solid" style={{backgroundColor:"#F17300"}} className="drawerbtns" onClick={() => {
+                                        setCart([...cart, item])
+                                        toast({
+                                            title: "Item Added.",
+                                            description: "We've added " + `${item.name}` + " to your cart",
+                                            status: "success",
+                                            duration: 2000,
+                                            isClosable: true,
+                                          })
+                                    }}> <FaCartPlus  /> </Button> </Td>
                                     </Tr>                        
                                 ))}
 
                                 </Tbody>
                             </Table>
+                            <div style={{textAlign:"center"}}>
+                                <Button variant="solid" style={{backgroundColor:"#F17300"}} onClick={() => setcheckoutbutton(true)} className="drawerbtns">Check-Out</Button>
+                            </div>
                         </DrawerBody>
-
-                        <DrawerFooter>
-                            <Button variant="outline" mr={3} onClick={onClose}>
-                            Cancel
-                            </Button>
-                            <Button colorScheme="blue">Save</Button>
-                        </DrawerFooter>
                         </DrawerContent>
                     </Drawer>
 
 
-                <Button  variant="solid" size="md" style={{marginTop:"10%", backgroundColor:"#DBE4EE", color:"#81a4cd", width:"85%" }} className="navbarbtns" ref={btnRef} colorScheme="teal" onClick={() => setorderbutton(true)}>
+                <Button  variant="solid" size="md" style={{marginTop:"10%", backgroundColor:"#DBE4EE", color:"#81a4cd", width:"85%" }} className="navbarbtns" ref={btnRef} colorScheme="teal" onClick={() => setcheckoutbutton(true)}>
                     Check-Out
                 </Button>
                     <Drawer
-                            isOpen={orderButton}
+                            isOpen={checkoutButton}
                             placement="top"
-                            onClose={() => setorderbutton(false)}
+                            onClose={() => setcheckoutbutton(false)}
                             finalFocusRef={btnRef}
                         >
                             <DrawerOverlay />
-                            <DrawerContent>
-                            <DrawerCloseButton />
-                            <DrawerHeader>Create your account</DrawerHeader>
+                            <DrawerContent style={{backgroundColor:"#054A91"}} >
+                                <Table variant="simple" size="sm" style={{textAlignLast:"center"}} >
+                                    <TableCaption style={{color:"white"}}>Best menu in the Hidden Leaf Village! You better believe it.</TableCaption>
+                                    <Thead >
+                                        <Tr>
+                                        <Th style={{color:"white"}}>Item</Th>
+                                        <Th style={{color:"white"}}>Cost</Th>
+                                        <Th style={{color:"white"}}>Remove From Cart</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                    
+                                    {cart.map((item, index) => (
+                                        <Tr>
+                                        <Td style={{color:"white"}}>{item.name}</Td>
+                                        <Td style={{color:"white"}}>{item.cost}</Td>
+                                        <Td> <Button  variant="solid" className="drawerbtns" style={{backgroundColor:"#F17300"}} onClick={() => {
+                                            handleRemove(index, item)
+                                            toast({
+                                                title: "Item Removed.",
+                                                description: "We've removed " + `${item.name}` + " from your cart",
+                                                status: "warning",
+                                                duration: 2000,
+                                                isClosable: true,
+                                              })
+                                        }}  
+                                            
+                                        > <FaWindowClose/> </Button> </Td>
+                                        </Tr>                        
+                                    ))}
 
-                            <DrawerBody>
-                                <Input placeholder="Type here..." />
-                            </DrawerBody>
+                                    </Tbody>
+                                </Table>
 
-                            <DrawerFooter>
-                                <Button variant="outline" mr={3} onClick={onClose}>
-                                Cancel
-                                </Button>
-                                <Button colorScheme="blue">Save</Button>
-                            </DrawerFooter>
+                                <Button onClick={() => setcheckScreen(true)} style={{backgroundColor:"#F17300"}} className="drawerbtns">Pay-Now</Button>
+
+                                    <Modal isOpen={checkScreen} isCentered motionPreset="slideInBottom">
+                                    <ModalOverlay />
+                                    <ModalContent style={{textAlign:"center", backgroundColor:"#054A91"}}>
+                                        <ModalHeader style={{color:"white"}}>Check-Out</ModalHeader>
+                                        <ModalBody>
+                                        <Table variant="simple" size="sm" style={{color:"white"}}>
+                                    <TableCaption style={{color:"white"}}>Remember to come back for some more of the best Ramen in town!</TableCaption>
+                                    <Thead>
+                                        <Tr>
+                                        <Th style={{color:"white"}}>Item</Th>
+                                        <Th style={{color:"white"}}>Cost</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                    {cart.map((item, index) => (
+                                        <Tr>
+                                        <Td>{item.name}</Td>
+                                        <Td>{item.cost}</Td>
+                                        </Tr>
+                                        ))}
+                                    </Tbody>
+                                </Table>
+                                        </ModalBody>
+                                        <ModalFooter style={{justifyContent:"center"}}>
+                                        <Button style={{backgroundColor:"#81A4CD"}} mr={3} className="drawerbtns">Pay-Now</Button>
+                                        
+                                        <Button style={{backgroundColor:"#F17300"}} mr={3} onClick={() => setcheckScreen(false)} className="drawerbtns">
+                                            Close
+                                        </Button>
+                                        </ModalFooter>
+                                    </ModalContent>
+                                    </Modal>
                             </DrawerContent>
                         </Drawer>
 
